@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<!-- スマホ表示を最優先。拡大縮小はさせずネイティブアプリに近い体験にする -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0a0b0f">
+<title>飲んで忘れたい夜もある？</title>
+<meta name="description" content="今夜くらい、飲んで忘れよう。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="night-backdrop" aria-hidden="true"></div>
+
+  <main class="hero-screen">
+    <p class="hero-eyebrow">NIGHT CALL</p>
+
+    <!-- ▼キャッチコピー：ここを書き換えるだけで差し替え可能 -->
+    <h1 class="hero-copy">飲んで忘れたい<br>夜もある？</h1>
+    <p class="hero-sub">正直に答えてください。</p>
+
+    <div class="button-stage" id="buttonStage">
+      <!-- YESボタン：計測用に id="yesButton" を付与 -->
+      <button type="button" id="yesButton" class="btn btn-yes">YES</button>
+
+      <!-- NOボタン：id="noButton"。近づく・触れると逃げる -->
+      <button type="button" id="noButton" class="btn btn-no">NO</button>
+
+      <!-- NOを押した(触れた)ときの一瞬だけのメッセージ -->
+      <p id="noToast" class="no-toast" aria-live="polite">今日はYESでお願いします。</p>
+    </div>
+  </main>
+
+  <!-- YESクリック後の暗転演出 -->
+  <div class="transition-veil" id="transitionVeil" aria-hidden="true">
+    <p class="transition-line">そんな貴方に。</p>
+  </div>
+
+  <!-- ============================================================
+       SE（効果音）について
+       ------------------------------------------------------------
+       NOボタンに触れてしまった時の「プシュン…」という効果音です。
+       assets/se_fail.mp3 を配置すると自動で再生されます。
+       ファイルが無い場合や再生に失敗しても、サイトの動作には
+       一切影響しません（script.js側でtry/catch済み）。
+  ============================================================= -->
+  <audio id="seFail" src="assets/se_fail.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

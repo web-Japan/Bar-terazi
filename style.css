@@ -1,0 +1,471 @@
+/* ============================================================
+   BAR 立て看板サイト - style.css
+   ------------------------------------------------------------
+   デザイントークン（色・フォント）はこのファイル上部の
+   :root 変数にまとまっています。
+   店舗の雰囲気に合わせて調整する場合はここを編集してください。
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600;900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap');
+
+:root {
+  /* ---- カラートークン ----
+     夜の繁華街を思わせる、黒〜チャコールネイビーの背景に
+     少しくすんだゴールドをアクセントとして使用。
+     ネオンイエローほど派手にせず、高級感を優先。 */
+  --color-bg-deep:    #0a0b0f;   /* もっとも暗い背景（ベース） */
+  --color-bg-panel:   #14161d;   /* カード・店舗紹介エリアの背景 */
+  --color-bg-panel-2: #1b1e27;   /* パネル内のさらに一段明るい面 */
+  --color-line:       rgba(255,255,255,0.08);
+
+  --color-text-main:  #f3efe6;   /* 純白ではなく温かみのあるオフホワイト */
+  --color-text-sub:   #9a9aa5;   /* 補足文・キャプション用の落ち着いたグレー */
+
+  --color-accent:     #caa25b;   /* くすみゴールド（メインアクセント） */
+  --color-accent-lit: #e9c883;   /* ホバー・押下時の明るいゴールド */
+  --color-accent-deep:#8a6a30;   /* 影・グラデーション用の暗いゴールド */
+
+  --color-no:         #2a2d36;   /* NOボタンの控えめな色 */
+  --color-no-text:    #c7c7d1;
+
+  /* ---- タイポグラフィ ---- */
+  --font-display: 'Zen Old Mincho', serif;        /* 見出し・キャッチコピー */
+  --font-body:    'Zen Kaku Gothic New', sans-serif; /* 本文・UI */
+
+  /* ---- レイアウト ---- */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--color-bg-deep);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+body {
+  /* iPhoneのアドレスバー等を考慮し、動的ビューポート単位を優先使用 */
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* 背景に微かな縦のグラデーションを重ね、夜の奥行きを演出 */
+.night-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(202,162,91,0.07), transparent 60%),
+    linear-gradient(180deg, var(--color-bg-deep) 0%, #0d0f14 55%, var(--color-bg-deep) 100%);
+  pointer-events: none;
+}
+
+/* 粒子のようなうっすらしたノイズ／ネオン感を出す横線 */
+.night-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   1ページ目 index.html
+   ============================================================ */
+
+.hero-screen {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(32px + var(--safe-top)) max(24px, var(--safe-left)) calc(48px + var(--safe-bottom));
+  text-align: center;
+  /* NOボタンの逃走範囲を計算するための基準コンテナ */
+}
+
+.hero-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+  opacity: 0.85;
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+
+.hero-copy {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(30px, 9.5vw, 46px);
+  line-height: 1.45;
+  color: var(--color-text-main);
+  margin: 0 0 12px;
+  text-wrap: balance;
+  animation: copy-rise 0.9s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--color-text-sub);
+  margin: 0 0 56px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  animation: copy-rise 0.9s 0.1s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@keyframes copy-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ボタンを配置する舞台。NOボタンはこの範囲内で逃げ回る */
+.button-stage {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: min(46vh, 340px);
+  min-height: 220px;
+}
+
+.btn {
+  border-radius: 999px;
+  font-family: var(--font-body);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* --- YESボタン：主役。大きく、押したくなるデザイン --- */
+.btn-yes {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -50%);
+  width: min(78vw, 300px);
+  padding: 22px 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #221a0c;
+  background: linear-gradient(155deg, var(--color-accent-lit), var(--color-accent) 55%, var(--color-accent-deep));
+  box-shadow:
+    0 10px 30px rgba(202,162,91,0.28),
+    0 2px 0 rgba(255,255,255,0.25) inset;
+  animation: yes-breathe 3.2s ease-in-out infinite;
+}
+
+.btn-yes:hover {
+  box-shadow:
+    0 14px 36px rgba(202,162,91,0.4),
+    0 2px 0 rgba(255,255,255,0.3) inset;
+}
+
+.btn-yes:active {
+  box-shadow:
+    0 6px 18px rgba(202,162,91,0.3),
+    0 1px 0 rgba(255,255,255,0.2) inset;
+}
+
+@keyframes yes-breathe {
+  0%, 100% { box-shadow: 0 10px 30px rgba(202,162,91,0.28), 0 2px 0 rgba(255,255,255,0.25) inset; }
+  50%      { box-shadow: 0 14px 40px rgba(202,162,91,0.42), 0 2px 0 rgba(255,255,255,0.3) inset; }
+}
+
+/* --- NOボタン：脇役。小さめ、逃げる --- */
+.btn-no {
+  position: absolute;
+  left: 50%;
+  top: 68%;
+  transform: translate(-50%, -50%);
+  width: 112px;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-no-text);
+  background: var(--color-bg-panel-2);
+  border: 1px solid var(--color-line);
+  /* 逃走時のアニメーション：0.2〜0.35秒程度の軽い動き */
+  transition: left 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              top 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.15s ease;
+}
+
+.btn-no.is-fleeing {
+  background: var(--color-bg-panel);
+}
+
+.no-toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(18px + var(--safe-bottom));
+  transform: translate(-50%, 6px);
+  font-size: 12px;
+  color: var(--color-text-sub);
+  background: rgba(20,22,29,0.9);
+  border: 1px solid var(--color-line);
+  padding: 8px 16px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+
+.no-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* --- YESクリック後の暗転演出 --- */
+.transition-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.55s ease;
+}
+
+.transition-veil.is-active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.transition-line {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 7vw, 34px);
+  color: var(--color-accent-lit);
+  opacity: 0;
+  letter-spacing: 0.04em;
+  transform: translateY(6px);
+  transition: opacity 0.6s ease 0.25s, transform 0.6s ease 0.25s;
+}
+
+.transition-veil.is-active .transition-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   2ページ目 answer.html
+   ============================================================ */
+
+.answer-hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(32px + var(--safe-top)) 28px 40px;
+  opacity: 0;
+  animation: page-in 0.9s ease forwards;
+}
+
+@keyframes page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.answer-hero .transition-line-static {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 9vw, 44px);
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin: 0 0 18px;
+}
+
+.scroll-hint {
+  margin-top: 34px;
+  font-size: 12px;
+  color: var(--color-text-sub);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.08em;
+}
+
+.scroll-hint .chevron {
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid var(--color-accent);
+  border-bottom: 1px solid var(--color-accent);
+  transform: rotate(45deg);
+  animation: chevron-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes chevron-bounce {
+  0%, 100% { transform: rotate(45deg) translate(0,0); opacity: 0.5; }
+  50%      { transform: rotate(45deg) translate(3px,3px); opacity: 1; }
+}
+
+.answer-body {
+  position: relative;
+  z-index: 1;
+  padding: 40px 24px calc(56px + var(--safe-bottom));
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.section-copy {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 6vw, 26px);
+  line-height: 1.7;
+  color: var(--color-text-main);
+  margin: 0 0 44px;
+}
+
+/* --- 店舗紹介エリア ---
+     店舗名・キャッチ文はここで管理。HTML側の該当箇所を
+     書き換えるだけで差し替え可能。 */
+.shop-card {
+  background: linear-gradient(180deg, var(--color-bg-panel), var(--color-bg-panel-2));
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  padding: 34px 26px;
+  margin-bottom: 40px;
+}
+
+.shop-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-lit);
+  margin: 0 0 20px;
+}
+
+.shop-lines {
+  font-size: 15px;
+  line-height: 2.1;
+  color: var(--color-text-sub);
+  font-weight: 300;
+  margin: 0 0 20px;
+}
+
+.shop-tagline {
+  font-size: 15px;
+  color: var(--color-text-main);
+  font-weight: 500;
+  margin: 0;
+}
+
+/* --- 徒歩○分（将来用のプレースホルダー） --- */
+.walk-time {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-sub);
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  padding: 12px 0;
+  margin: 0 0 26px;
+  letter-spacing: 0.04em;
+}
+
+/* --- CTA：Googleマップへの導線 --- */
+.route-button {
+  display: block;
+  width: 100%;
+  padding: 20px 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #221a0c;
+  background: linear-gradient(155deg, var(--color-accent-lit), var(--color-accent) 55%, var(--color-accent-deep));
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(202,162,91,0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.route-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 6px 16px rgba(202,162,91,0.3);
+}
+
+.route-caption {
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-text-sub);
+  margin-top: 14px;
+  letter-spacing: 0.03em;
+}
+
+/* ============================================================
+   共通ユーティリティ
+   ============================================================ */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* キーボード操作時のフォーカス可視化 */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-accent-lit);
+  outline-offset: 3px;
+}
+
+/* モーション低減設定を尊重 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* 小さめ端末での余白調整 */
+@media (max-height: 640px) {
+  .button-stage { height: 42vh; min-height: 190px; }
+  .hero-sub { margin-bottom: 34px; }
+}
