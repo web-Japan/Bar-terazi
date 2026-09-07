@@ -1,0 +1,342 @@
+/* =========================================================
+   BAR 立て看板QR ミニサイト / style.css
+   黄色 × 白 × 黒 / ポップ / シンプル / 少しシュール
+   ========================================================= */
+
+:root {
+  --yellow: #FFDD00;
+  --ink: #141414;
+  --white: #FFFFFF;
+  --shadow-ink: #141414;
+
+  --radius-btn: 22px;
+  --border-w: 3px;
+
+  /* Safe Area (iPhoneノッチ/ホームバー対応) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* 横スクロール禁止 */
+  background: var(--yellow);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", "Hiragino Sans",
+    "Noto Sans JP", sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* =========================================================
+   1ページ目: index.html
+   ========================================================= */
+
+.page--yes-no {
+  position: relative;
+  min-height: 100svh;
+  min-height: 100dvh;
+  min-height: 100vh; /* フォールバック */
+  background: var(--yellow);
+  overflow: hidden; /* NOボタンが逃げてもスクロールを発生させない */
+}
+
+.stage {
+  position: relative;
+  min-height: 100svh;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 8vh, 56px);
+  padding:
+    calc(var(--safe-top) + 32px)
+    calc(var(--safe-right) + 24px)
+    calc(var(--safe-bottom) + 32px)
+    calc(var(--safe-left) + 24px);
+}
+
+.copy {
+  margin: 0;
+  text-align: center;
+  font-weight: 900;
+  font-size: clamp(2.1rem, 8.6vw, 3.1rem);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  max-width: 11ch;
+}
+
+.buttonRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 6vw, 32px);
+  width: 100%;
+}
+
+/* YES / NO 共通ボタンスタイル */
+.choiceBtn {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  width: clamp(120px, 32vw, 150px);
+  height: clamp(64px, 16vw, 78px);
+  border-radius: var(--radius-btn);
+  background: var(--white);
+  color: var(--ink);
+  border: var(--border-w) solid var(--ink);
+  box-shadow: 6px 6px 0 var(--shadow-ink);
+  font-weight: 800;
+  font-size: clamp(1.15rem, 4.6vw, 1.4rem);
+  letter-spacing: 0.06em;
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.choiceBtn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--shadow-ink);
+}
+
+/* NOボタンが「逃走モード」に入ったら fixed 配置に切り替える。
+   位置(left/top)は script.js から都度指定する */
+.choiceBtn--no.is-fleeing {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  transition:
+    left 0.24s cubic-bezier(0.19, 1, 0.22, 1),
+    top 0.24s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+}
+
+/* YESを押した瞬間の白フェード演出 */
+.transitionOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--white);
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.38s ease-out;
+  z-index: 20;
+  padding: 0 24px;
+}
+
+.transitionOverlay.is-active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.transitionText {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  color: var(--ink);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transition: opacity 0.36s ease-out 0.12s, transform 0.36s ease-out 0.12s;
+}
+
+.transitionOverlay.is-active .transitionText {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choiceBtn,
+  .choiceBtn--no.is-fleeing,
+  .transitionOverlay,
+  .transitionText {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================================
+   2ページ目: answer.html
+   ========================================================= */
+
+.page--answer {
+  min-height: 100svh;
+  min-height: 100dvh;
+  min-height: 100vh;
+  background: var(--yellow);
+  padding:
+    calc(var(--safe-top) + 40px)
+    calc(var(--safe-right) + 22px)
+    calc(var(--safe-bottom) + 32px)
+    calc(var(--safe-left) + 22px);
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.answerHero {
+  text-align: center;
+}
+
+.answerHero__lead {
+  margin: 0 0 10px;
+  font-weight: 900;
+  font-size: clamp(2rem, 9vw, 2.6rem);
+  line-height: 1.2;
+}
+
+.answerHero__tagline {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(1rem, 4.4vw, 1.15rem);
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+.shop {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 8px;
+  border-top: var(--border-w) solid var(--ink);
+}
+
+.shop__name {
+  margin: 18px 0 0;
+  font-size: clamp(1.5rem, 6.6vw, 1.9rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.shop__copy {
+  margin: 0;
+  font-family: "Zen Maru Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.98rem, 4.2vw, 1.08rem);
+  line-height: 1.9;
+  color: var(--ink);
+}
+
+.shop__photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--ink);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shop__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.shop__photo-placeholder {
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+}
+
+.shop__info {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shop__info-row {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 2px solid var(--ink);
+  align-items: baseline;
+}
+
+.shop__info-row dt {
+  flex: 0 0 auto;
+  font-weight: 800;
+  font-size: 0.85rem;
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.shop__info-row dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.routeSection {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.routeSection__title {
+  margin: 0 0 2px;
+  text-align: center;
+  font-weight: 900;
+  font-size: clamp(1rem, 4.4vw, 1.15rem);
+}
+
+.routeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  background: var(--ink);
+  color: var(--yellow);
+  text-decoration: none;
+  font-weight: 900;
+  font-size: clamp(1.02rem, 4.6vw, 1.15rem);
+  border-radius: var(--radius-btn);
+  border: var(--border-w) solid var(--ink);
+  box-shadow: 6px 6px 0 rgba(20, 20, 20, 0.35);
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+  letter-spacing: 0.03em;
+}
+
+.routeButton:active {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0 rgba(20, 20, 20, 0.35);
+}
+

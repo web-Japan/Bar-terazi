@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>そんな貴方に!</title>
+</head>
+<body>
+<main class="page page--answer">
+  <section class="answerHero">
+    <p class="answerHero__lead">そんな貴方に!</p>
+    <p class="answerHero__tagline">今夜くらい、飲んで忘れよう。</p>
+  </section>
+  <section class="shop">
+    <!-- 店舗名: ここを実際の店舗名に変更 -->
+    <h2 class="shop__name">Bar BlueTemple</h2>
+    <p class="shop__copy">仕事終わりでも。<br>友達とでも。<br>ひとりでも。<br><br>今日はちょっと、<br>飲んで帰りませんか。</p>
+    <div class="shop__photo" id="shopPhoto">
+      <!-- <img src="assets/shop-photo.jpg" alt="店内の様子"> -->
+      <span class="shop__photo-placeholder">店舗写真</span>
+    </div>
+    <dl class="shop__info">
+      <div class="shop__info-row"><dt>営業時間</dt><dd>18:00 〜 26:00(日祝休)</dd></div>
+      <div class="shop__info-row"><dt>住所</dt><dd>東京都渋谷区XXXX 1-2-3 XXXビル B1</dd></div>
+    </dl>
+  </section>
+  <section class="routeSection">
+    <p class="routeSection__title">お店までのルートはこちら</p>
+
+    <a id="appleMapsButton" class="routeButton"
+       href="https://maps.apple.com/?saddr=%E5%B0%8F%E5%80%89%E9%A7%85%20%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82&daddr=Bar%20BlueTemple&dirflg=w"
+       target="_blank" rel="noopener noreferrer">iPhoneの方</a>
+
+    <a id="googleMapsButton" class="routeButton"
+       href="https://www.google.com/maps/dir/?api=1&origin=%E5%B0%8F%E5%80%89%E9%A7%85%20%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82&destination=Bar%20BlueTemple&travelmode=walking"
+       target="_blank" rel="noopener noreferrer">Androidの方</a>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
